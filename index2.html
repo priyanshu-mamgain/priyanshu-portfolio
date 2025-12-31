@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Portfolio</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-primary: #ffffff;
+            --text-glow: #ffffff;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --bg-secondary: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            padding: 20px;
+            overflow: hidden;
+        }
+        
+        .theme-toggle {
+            position: fixed; top: 20px; right: 20px;
+            width: 50px; height: 50px; border-radius: 50%;
+            background: var(--glass-bg); backdrop-filter: blur(20px);
+            border: 2px solid var(--glass-border);
+            color: var(--text-primary); font-size: 1.2rem;
+            cursor: pointer; transition: all 0.4s ease;
+            z-index: 1000; display: flex; align-items: center; justify-content: center;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 500px;
+            height: 80vh;
+            gap: 20px;
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 700; margin: 0;
+            background: var(--text-glow);
+            background-clip: text; -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.4));
+            text-align: center;
+        }
+        
+        .subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            opacity: 0.9; margin: 0;
+            text-align: center; max-width: 90%;
+        }
+        
+        .portfolio-card {
+            position: relative; display: block;
+            background: var(--glass-bg); backdrop-filter: blur(25px);
+            border-radius: 30px; padding: 50px 30px;
+            border: 2px solid var(--glass-border);
+            text-decoration: none; color: inherit;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            flex: 1; width: 100%;
+            text-align: center;
+        }
+        
+        .portfolio-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%;
+            width: 200%; height: 200%; 
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transition: all 0.5s; opacity: 0; transform: scale(0.5);
+        }
+        
+        .portfolio-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            background: rgba(255,255,255,0.18);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+        }
+        
+        .portfolio-card:hover::before {
+            opacity: 1; transform: scale(1);
+        }
+        
+        .portfolio-icon {
+            font-size: clamp(3rem, 10vw, 4.5rem);
+            margin-bottom: 20px; display: block;
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.6));
+        }
+        
+        .portfolio-card h2 {
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            margin-bottom: 15px; font-weight: 600;
+        }
+        
+        .portfolio-card p {
+            font-size: 1.1rem; opacity: 0.95;
+            margin-bottom: 25px; line-height: 1.5;
+        }
+        
+        .enter-btn {
+            display: inline-block; background: var(--glass-bg);
+            backdrop-filter: blur(15px); border: 2px solid var(--glass-border);
+            color: var(--text-primary); padding: 12px 35px;
+            border-radius: 40px; font-size: 1rem; font-weight: 500;
+            text-decoration: none; transition: all 0.3s ease;
+        }
+        
+        .enter-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .footer {
+            position: fixed; bottom: 20px; opacity: 0.6;
+            font-size: 0.85rem; text-align: center;
+            max-width: 300px;
+        }
+        
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .main-container { height: 85vh; gap: 15px; }
+            .portfolio-card { padding: 40px 25px; }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    
+    <div class="main-container">
+        <h1>Portfolio</h1>
+        <p class="subtitle">Frontend Developer | Dehradun, Uttarakhand </p>
+        
+        <a href="index.html" class="portfolio-card">
+            <span class="portfolio-icon">💼</span>
+            <h2>Enter My World</h2>
+            <p>Interactive projects, Modern Skills Showcase</p>
+            <div class="enter-btn">Launch Portfolio →</div>
+        </a>
+    </div>
+    
+    <div class="footer">
+        Click to explore | Pure HTML/CSS/JS 🚀
+    </div>
+
+    <script>
+        const themeBtn = document.getElementById('themeBtn');
+        function toggleTheme() {
+            const body = document.body;
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                themeBtn.textContent = '🌙';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeBtn.textContent = '☀️';
+            }
+        }
+    </script>
+</body>
+</html>
